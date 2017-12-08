@@ -6,11 +6,23 @@
     android:orientation="vertical"
    >
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:text="TextView"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever" />
+
     <com.example.cameraalbumtest2.PaletteView
         android:id="@+id/palette"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="324dp"
+        android:layout_weight="1" />
         <!--android:background="@drawable/bg"-->
 
 
@@ -40,11 +52,11 @@
     <LinearLayout
         android:id="@+id/Color"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="57dp"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.example.cameraalbumtest2.ImageViewPlus
             android:id="@+id/black"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
@@ -53,7 +65,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/black" />
 
-        <ImageView
+        <com.example.cameraalbumtest2.ImageViewPlus
             android:id="@+id/red"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -62,32 +74,41 @@
             android:scaleType="centerInside"
             android:src="@drawable/red" />
 
-        <ImageView
-        android:id="@+id/Yellow"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:layout_weight="1"
-        android:background="@drawable/toolbar_item_bg"
-        android:scaleType="centerInside"
-        android:src="@drawable/red" />
-
-        <ImageView
-            android:id="@+id/Blue"
+        <com.example.cameraalbumtest2.ImageViewPlus
+            android:id="@+id/yellow"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:layout_weight="1"
             android:background="@drawable/toolbar_item_bg"
             android:scaleType="centerInside"
-            android:src="@drawable/red" />
+            android:src="@drawable/yellow" />
 
-        <ImageView
-            android:id="@+id/Green"
+        <com.example.cameraalbumtest2.ImageViewPlus
+            android:id="@+id/blue"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:layout_weight="1"
             android:background="@drawable/toolbar_item_bg"
             android:scaleType="centerInside"
-            android:src="@drawable/red" />
+            android:src="@drawable/blue" />
+
+        <com.example.cameraalbumtest2.ImageViewPlus
+            android:id="@+id/green"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:background="@drawable/toolbar_item_bg"
+            android:scaleType="centerInside"
+            android:src="@drawable/green" />
+
+        <com.example.cameraalbumtest2.ImageViewPlus
+            android:id="@+id/brown"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:background="@drawable/toolbar_item_bg"
+            android:scaleType="centerInside"
+            android:src="@drawable/brown" />
 
     </LinearLayout>
 

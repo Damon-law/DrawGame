@@ -61,6 +61,13 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
         mEraserView.setOnClickListener(this);
         mClearView.setOnClickListener(this);
 
+        findViewById(R.id.black).setOnClickListener(this);
+        findViewById(R.id.red).setOnClickListener(this);
+        findViewById(R.id.yellow).setOnClickListener(this);
+        findViewById(R.id.blue).setOnClickListener(this);
+        findViewById(R.id.green).setOnClickListener(this);
+        findViewById(R.id.brown).setOnClickListener(this);
+
         mUndoView.setEnabled(false);
         mRedoView.setEnabled(false);
 
@@ -187,9 +194,7 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
                 mPaletteView.redo();
                 break;
             case R.id.pen:
-
                 v.setSelected(true);
-                mPaletteView.getmPaint().setColor(0XFFFF0000);
                 mEraserView.setSelected(false);
                 ShowColor();
                 mPaletteView.setMode(PaletteView.Mode.DRAW);
@@ -204,7 +209,28 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.clear:
                 mPaletteView.clear();
                 break;
+            case R.id.black:
+                mPaletteView.getmPaint().setColor(0XFF000000);
+                HideColor();
+                break;
             case R.id.red:
+                mPaletteView.getmPaint().setColor(0XFFFF0000);
+                HideColor();
+                break;
+            case R.id.yellow:
+                 mPaletteView.getmPaint().setColor(0XFFFFFF00);
+                 HideColor();
+                    break;
+            case R.id.blue:
+                mPaletteView.getmPaint().setColor(0XFF0000FF);
+                HideColor();
+                break;
+            case R.id.green:
+                mPaletteView.getmPaint().setColor(0XFF00FF00);
+                HideColor();
+                break;
+            case R.id.brown:
+                mPaletteView.getmPaint().setColor(0XFF663300);
                 HideColor();
                 break;
         }

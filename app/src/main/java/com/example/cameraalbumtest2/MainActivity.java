@@ -22,8 +22,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,104 +39,61 @@ public class MainActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     private ImageView picture;
     private Uri imageUri;
+    private String name;
 public static final int CHOOSE_PHOTO = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏，一定要在setContentView之前
         setContentView(R.layout.activity_main);
-        Button takePhoto = (Button) findViewById(R.id.take_photo);
-        Button chooseFromAlbum = (Button) findViewById(R.id.choose_from_album);
-        Button test = (Button) findViewById(R.id.test);
         picture = (ImageView) findViewById(R.id.picture);
+        Button send = (Button) findViewById(R.id.send);
+        Button join = (Button) findViewById(R.id.join);
+        EditText input = (EditText) findViewById(R.id.input_name);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this,android.R.layout.simple_list_item_1,new String[]{"拍照","从相册中选择"}
+        );
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setPositiveButton("打开相机", new DialogInterface.OnClickListener(){
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        File outputImage = new File(getExternalCacheDir(),"output_image.jpg");
-                        try{
-                            if (outputImage.exists()){
-                                outputImage.delete();
-                            }
-                            outputImage.createNewFile();
-                        }catch (IOException e){
-                            e.printStackTrace();
-                        }
-                        if (Build.VERSION.SDK_INT >=24){
-                            imageUri = FileProvider.getUriForFile(MainActivity.this,"com.example.cameraalbumtest2.fileprovider",outputImage);
-                        } else {
-                            imageUri = Uri.fromFile(outputImage);
-                        }
-                        //启动相机程序
-                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                        startActivityForResult(intent,TAKE_PHOTO);
-                    }
-                });
-                builder.setNegativeButton("在相册中选择", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE )
-                                !=PackageManager.PERMISSION_GRANTED){
-                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            },1) ;
-                        }else{
-                            openAlbum();
+                        switch (i){
+                            case 0:
+                                TakePhoto();
+                                break;
+                            case 1:
+                                CallAlbum();
+                                break;
                         }
                     }
-                });
+                }).create();
                 builder.show();
             }
         });
-        test.setOnClickListener(new View.OnClickListener() {
+        join.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         Intent intent = new Intent(MainActivity.this,DrawActivity.class);
                                         startActivity(intent);
                                     }
                                 });
-        takePhoto.setOnClickListener(new View.OnClickListener(){
-
+        send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File outputImage = new File(getExternalCacheDir(),"output_image.jpg");
-                try{
-                    if (outputImage.exists()){
-                        outputImage.delete();
-                    }
-                    outputImage.createNewFile();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-                if (Build.VERSION.SDK_INT >=24){
-                    imageUri = FileProvider.getUriForFile(MainActivity.this,"com.example.cameraalbumtest2.fileprovider",outputImage);
-                } else {
-                    imageUri = Uri.fromFile(outputImage);
-                }
-                //启动相机程序
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                startActivityForResult(intent,TAKE_PHOTO);
-
+                EditText input = (EditText) findViewById(R.id.input_name);
+                name = input.getText().toString();
+                input.setHint(name);
+                input.setText("");
+                input.setInputType(InputType.TYPE_NULL);
+                input.clearFocus();
+                input.setCursorVisible(false);
+                view.setSelected(true);
             }
         });
-        chooseFromAlbum.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE )
-                    !=PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    },1) ;
-                }else{
-                    openAlbum();
-                }
-            }
-        });
-        }
+    }
 
         private void openAlbum(){
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
@@ -231,6 +192,37 @@ public static final int CHOOSE_PHOTO = 2;
             picture.setImageBitmap(bitmap);
         } else {
             Toast.makeText(this,"failed to get image",Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void TakePhoto(){
+        File outputImage = new File(getExternalCacheDir(),"output_image.jpg");
+        try{
+            if (outputImage.exists()){
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >=24){
+            imageUri = FileProvider.getUriForFile(MainActivity.this,"com.example.cameraalbumtest2.fileprovider",outputImage);
+        } else {
+            imageUri = Uri.fromFile(outputImage);
+        }
+        //启动相机程序
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+        startActivityForResult(intent,TAKE_PHOTO);
+    }
+
+    private void CallAlbum(){
+        if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE )
+                !=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },1) ;
+        }else{
+            openAlbum();
         }
     }
 }

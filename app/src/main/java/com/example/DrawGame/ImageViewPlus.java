@@ -1,4 +1,4 @@
-package com.example.cameraalbumtest2;
+package com.example.DrawGame;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,9 +14,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.support.v7.widget.AppCompatImageView;
-
-
-import java.util.jar.Attributes;
 
 /**
  * Created by adminlyb on 2017/12/7.

@@ -1,4 +1,4 @@
-package com.example.cameraalbumtest2;
+package com.example.DrawGame;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -66,20 +66,21 @@ public class PaletteView extends View {
     }
 
     private void init() {
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setFilterBitmap(true);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mDrawSize = 10;
-        mEraserSize = 40;
-        mPaint.setStrokeWidth(mDrawSize);
-        mPaint.setColor(0XFF000000);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);//使用抗锯齿功能,使用图像抖动处理
+        mPaint.setStyle(Paint.Style.STROKE);//设置画笔的样式
+        mPaint.setFilterBitmap(true);//图像在动画进行中会滤掉对Bitmap图像的优化操作，加快显示速度
+        mPaint.setStrokeJoin(Paint.Join.ROUND);//设置绘制时各图形的结合方式，平滑效果
+        mPaint.setStrokeCap(Paint.Cap.ROUND);//设置笔刷的图形样式，圆形样式
+        mDrawSize = 10;//画笔大小
+        mEraserSize = 40;//橡皮擦大小
+        mPaint.setStrokeWidth(mDrawSize);//设置笔刷的粗细度
+        mPaint.setColor(0XFF000000);//设置绘制的颜色
 
         mClearMode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
     }
 
     private void initBuffer(){
+        //初始化缓冲器
         mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
@@ -151,6 +152,7 @@ public class PaletteView extends View {
     }
 
     public void redo() {
+        //撤销时把撤销的轨迹和画笔属性保存在另一个列表里，反撤销时从这个列表里取出来放到记录绘制信息的列表里，然后重绘
         int size = mRemovedList == null ? 0 : mRemovedList.size();
         if (size > 0) {
             DrawingInfo info = mRemovedList.remove(size - 1);
@@ -164,6 +166,7 @@ public class PaletteView extends View {
     }
 
     public void undo() {
+        //在画轨迹时，记录每一步的轨迹和画笔属性，每次撤销时把最后一步删除，然后重绘
         int size = mDrawingList == null ? 0 : mDrawingList.size();
         if (size > 0) {
             DrawingInfo info = mDrawingList.remove(size - 1);

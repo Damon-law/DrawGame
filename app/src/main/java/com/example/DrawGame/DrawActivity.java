@@ -1,4 +1,4 @@
-package com.example.cameraalbumtest2;
+package com.example.DrawGame;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,8 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -22,6 +21,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DrawActivity extends AppCompatActivity implements View.OnClickListener, PaletteView.Callback,Handler.Callback {
 
@@ -36,14 +37,15 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
     private static final int MSG_SAVE_SUCCESS = 1;
     private static final int MSG_SAVE_FAILED = 2;
     private Handler mHandler;
+    private BarrageView barrageView;
+    private List<Barrage> mBarrages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
         HideColor();
-
-
+        barrageView = (BarrageView) findViewById(R.id.barrageView);
 
         mPaletteView = (PaletteView) findViewById(R.id.palette);
         mPaletteView.setCallback(this);
@@ -67,11 +69,14 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.blue).setOnClickListener(this);
         findViewById(R.id.green).setOnClickListener(this);
         findViewById(R.id.brown).setOnClickListener(this);
-
+        findViewById(R.id.send).setOnClickListener(this);
+        findViewById(R.id.answer).setOnClickListener(this);
         mUndoView.setEnabled(false);
         mRedoView.setEnabled(false);
 
         mHandler = new Handler(this);
+
+        barrageView.setBarrages(mBarrages);
     }
 
     @Override
@@ -115,6 +120,7 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private static void scanFile(Context context, String filePath) {
+        //扫描指定文件，保存
         Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         scanIntent.setData(Uri.fromFile(new File(filePath)));
         context.sendBroadcast(scanIntent);
@@ -232,6 +238,13 @@ public class DrawActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.brown:
                 mPaletteView.getmPaint().setColor(0XFF663300);
                 HideColor();
+                break;
+            case R.id.send:
+                EditText get = (EditText)findViewById(R.id.answer);
+                String barrage = get.getText().toString();
+                Barrage newone = new Barrage(barrage);
+                barrageView.addBarrage(newone);
+                get.setText("");
                 break;
         }
     }

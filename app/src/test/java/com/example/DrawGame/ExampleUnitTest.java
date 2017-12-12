@@ -1,4 +1,4 @@
-package com.example.cameraalbumtest2;
+package com.example.DrawGame;
 
 import org.junit.Test;
 

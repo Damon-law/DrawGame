@@ -1,4 +1,4 @@
-package com.example.cameraalbumtest2;
+package com.example.DrawGame;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -12,17 +12,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.PersistableBundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.method.HideReturnsTransformationMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -73,6 +73,7 @@ public static final int CHOOSE_PHOTO = 2;
                 builder.show();
             }
         });
+
         join.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -80,17 +81,29 @@ public static final int CHOOSE_PHOTO = 2;
                                         startActivity(intent);
                                     }
                                 });
+
+        input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText input = (EditText) findViewById(R.id.input_name);
+                if (!input.isCursorVisible()) {
+                    ((EditText) findViewById(R.id.input_name)).setCursorVisible(true);
+                    input.setText(name);
+                    input.setSelection(name.length());
+                }
+            }
+        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText input = (EditText) findViewById(R.id.input_name);
                 name = input.getText().toString();
-                input.setHint(name);
-                input.setText("");
-                input.setInputType(InputType.TYPE_NULL);
-                input.clearFocus();
-                input.setCursorVisible(false);
-                view.setSelected(true);
+                if (!name.equals("")) {
+                    input.setHint(name);
+                    input.setText("");
+                    input.setCursorVisible(false);
+                }
             }
         });
     }
@@ -205,7 +218,7 @@ public static final int CHOOSE_PHOTO = 2;
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >=24){
-            imageUri = FileProvider.getUriForFile(MainActivity.this,"com.example.cameraalbumtest2.fileprovider",outputImage);
+            imageUri = FileProvider.getUriForFile(MainActivity.this,"com.example.DrawGame.fileprovider",outputImage);
         } else {
             imageUri = Uri.fromFile(outputImage);
         }

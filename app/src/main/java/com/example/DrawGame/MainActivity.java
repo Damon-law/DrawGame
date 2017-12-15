@@ -2,6 +2,7 @@ package com.example.DrawGame;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -35,12 +36,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     public static final int TAKE_PHOTO = 1;
     private ImageView picture;
     private Uri imageUri;
     private String name;
-public static final int CHOOSE_PHOTO = 2;
+    private String path;
+
+    public static final int CHOOSE_PHOTO = 2;
+    public static final String PHOTO_PATH = "MY_PHTO_PATH";
+    public static final String USER_NAME = "MY_USER_NAME";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +82,9 @@ public static final int CHOOSE_PHOTO = 2;
         join.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        Intent intent = new Intent(MainActivity.this,DrawActivity.class);
+                                        Intent intent = new Intent(MainActivity.this,WifiP2p.class);
+                                        intent.putExtra(PHOTO_PATH,path);
+                                        intent.putExtra(USER_NAME,name);
                                         startActivity(intent);
                                     }
                                 });
@@ -137,6 +144,7 @@ public static final int CHOOSE_PHOTO = 2;
                         //将拍摄的照片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                         picture.setImageBitmap(bitmap);
+                        path = imageUri.getPath();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -180,7 +188,7 @@ public static final int CHOOSE_PHOTO = 2;
                 //如果是file类型的Uri，，直接获取图片路径即可
                 imagePath = uri.getPath();
             }
-            displayImage(imagePath);//根据图片路径显示图片
+            displayImage(imagePath);//根据图片路径显示图
     }
     private void handleImageBeforeKitkat(Intent data){
         Uri uri = data.getData();
@@ -197,6 +205,7 @@ public static final int CHOOSE_PHOTO = 2;
             }
             cursor.close();
         }
+        this.path = path;
         return path;
     }
     private void displayImage(String imagePath){
@@ -214,6 +223,7 @@ public static final int CHOOSE_PHOTO = 2;
                 outputImage.delete();
             }
             outputImage.createNewFile();
+            path = outputImage.getPath();
         }catch (IOException e){
             e.printStackTrace();
         }

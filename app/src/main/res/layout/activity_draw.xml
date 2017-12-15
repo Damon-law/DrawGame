@@ -27,7 +27,7 @@
         <com.example.DrawGame.PaletteView
             android:id="@+id/palette"
             android:layout_width="match_parent"
-            android:layout_height="324dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -174,5 +174,10 @@
             android:background="@drawable/toolbar_item_bg"
             />
     </LinearLayout>
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
